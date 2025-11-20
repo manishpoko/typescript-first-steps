@@ -1,4 +1,24 @@
-const events = [
+
+type Rsvp = {
+    user_id?: number| string
+}
+
+type Id = string | number
+
+
+type Event = {
+    id: Id
+    title: string;
+    date: string;
+    image_url?: string;
+    host_id: number | string;
+    description?: string;
+    rsvps?: Rsvp[];
+}
+
+
+
+const events: Event[] = [
     {
         id: "1",
         title: "Thanksgiving Potluck",
@@ -15,27 +35,32 @@ const events = [
         host_id: "3"
     }
 ];
+
 // Should return an event object, or null if not found
-function getEventById(id) {
-    return events.filter(e => e.id.toString() === id.toString())[0];
+function getEventById(id: Id): Event | null {
+    return events.filter(e => e.id.toString() === id.toString()) [0];
 }
+
 // Should return an object with dateString & isPast 
-function getEventDate(event) {
+function getEventDate(event: Event) {
     const eventDate = new Date(event.date);
     const dateString = eventDate.toDateString();
     const isPast = eventDate < new Date();
     return { dateString, isPast };
 }
+
 // Should return a string like '5 going' or '0 went'
-const getEventRsvpCount = (event) => {
-    const count = event.rsvps ? event.rsvps.length : 0;
+const getEventRsvpCount = (event: Event): string => {
+    const count = event.rsvps? event.rsvps.length: 0;
+
     const { isPast } = getEventDate(event);
     const text = isPast ? 'went' : 'going';
     return [count, text].join(' ');
-};
+}
+
 // Should return a string with the event's title, date, and rsvps
 // (if the event exists), or the string 'Event not found' (if not)
-const getEventDetails = (eventId) => {
+const getEventDetails = (eventId: Id): string => {
     const event = getEventById(eventId);
     if (event) {
         const { dateString } = getEventDate(event);
@@ -43,24 +68,29 @@ const getEventDetails = (eventId) => {
         return `${event.title} on ${dateString}: ${eventRsvps}`;
     }
     return 'Event not found';
-};
+}
+
 function test() {
     const results = [{
-            actual: getEventDetails(1),
-            expected: `${events[0].title} on ${new Date(events[0].date).toDateString()}: 3 going`,
-        },
-        {
-            actual: getEventDetails(2),
-            expected: `${events[1].title} on ${new Date(events[1].date).toDateString()}: 0 going`,
-        },
-        {
-            actual: getEventDetails(404),
-            expected: 'Event not found',
-        }];
+        actual: getEventDetails(1),
+        expected: `${events[0].title} on ${new Date(events[0].date).toDateString()}: 3 going`,
+    },
+    {
+        actual: getEventDetails(2),
+        expected: `${events[1].title} on ${new Date(events[1].date).toDateString()}: 0 going`,
+    },
+    {
+        actual: getEventDetails(404),
+        expected: 'Event not found',
+    }];
+
     for (let result of results) {
-        const label = result.expected === result.actual ? '✅' : '❌';
+        const label = result.expected === result.actual ? '✅' : '❌'
         console.log(label, result.actual);
     }
 }
+
 test();
-export { getEventDetails };
+
+
+export { getEventDetails }

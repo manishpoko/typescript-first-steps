@@ -1,14 +1,28 @@
+
+
+type Id= number ;
+
+
 interface HasId {
     id: Id; // declare this type!
 }
 
 interface User extends HasId {
     // complete me!
+    username: string;
+    name: string;
+    email?: string;
 };
 
 
 interface Event extends HasId {
     // complete me!
+    image_url?: string;
+    host_id: Id;
+    date: Date;
+    description?: string;
+    title: string
+
 }
 
 
@@ -36,6 +50,16 @@ function createUser(username: string, name: string, email?: string): User {
     return user;
 }
 
+// type EventDetailsWithoutIds= {
+//     date: Date,
+//     image_url: string,
+//     title: string,
+//     description: string
+
+// }
+
+type EventDetailsWithoutIds = Omit<Event, 'id' | 'host_id'>
+
 // declare the missing EventDetailsWithoutIds type!
 function createEvent(host: User, eventDetails: EventDetailsWithoutIds): Event {
     const { date, title, image_url, description } = eventDetails;
@@ -44,8 +68,8 @@ function createEvent(host: User, eventDetails: EventDetailsWithoutIds): Event {
     const event: Event = {
         id: createNextId<Event>(EVENTS),
         host_id: host.id,
-        date: eventDate,
-        title,
+        date: date,
+        title: title
     };
     if (image_url) { event.image_url = image_url };
     if (description) { event.description = description };
